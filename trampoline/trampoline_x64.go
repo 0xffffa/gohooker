@@ -162,8 +162,6 @@ func (hook *TrampolineHook) applyShortJump(targetFunc, newFunc uintptr) error {
 
 // applyLongJump applies a long jump from targetFunc to newFunc.
 func (hook *TrampolineHook) applyLongJump(targetFunc, newFunc uintptr) error {
-	fmt.Println("Black long jump applied")
-
 	jmpBytes := []byte{
 		0x49, 0xBA, // MOV RAX, immediate
 	}
