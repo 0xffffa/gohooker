@@ -5,7 +5,9 @@ Hook functions from pointers, windows api, dll & more!
 
 ## Installation
 
-`go get github.com/0xffffa/gohooker`
+```go
+go get github.com/0xffffa/gohooker
+```
 
 ## Usage
 
