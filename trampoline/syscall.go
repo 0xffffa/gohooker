@@ -6,7 +6,9 @@ import (
 	"syscall"
 )
 
-func WrapFunction[T any](fn T, funcAddress uintptr) interface{} {
+func WrapFunction[T any](funcAddress uintptr) interface{} {
+	fn := *(new(T))
+
 	if reflect.TypeOf(fn).Kind() != reflect.Func {
 		panic("non function tried to wraped?")
 	}

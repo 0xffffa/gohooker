@@ -44,7 +44,7 @@ func main() {
 	var trampHook *trampoline.TrampolineHook
 	trampHook = gohooker.NewHook(targetFuncAddr, func(hWnd syscall.Handle, lpText, lpCaption *uint16, uType uint) int {
 		fmt.Println("Hooker called man", trampHook.Trampoline)
-		return trampoline.WrapFunction[MessageBoxW](nil, trampHook.Trampoline).(MessageBoxW)(hWnd, wstrPtr("Yep this the hooked body with MY function"), wstrPtr("And this is the Title"), uType)
+		return trampoline.WrapFunction[MessageBoxW](trampHook.Trampoline).(MessageBoxW)(hWnd, wstrPtr("Yep this the hooked body with MY function"), wstrPtr("And this is the Title"), uType)
 	})
 
 	if r, _, err := target.Call(0, wstrUPtr("MessageBoxW"), wstrUPtr("MessageBoxW"), 0); r == 0 && err != nil {
