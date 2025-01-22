@@ -1,7 +1,7 @@
 # gohooker - function ptr hooking in go!
 
-A pure go x86/x64 compatible trampoline hook for stdlib functions!
-Hook Windows API, DLL & more!
+A pure go x86/x64 compatible trampoline hook for stdlib functions\
+Hook functions from pointers, windows api, dll functions & more!
 
 ## Installation
 
