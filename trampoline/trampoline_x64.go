@@ -131,7 +131,7 @@ func (hook *TrampolineHook) createTrampoline(targetFunc uintptr) (uintptr, error
 	trampoline := make([]byte, 5) // Use long jump size instead of short jump
 	copy(trampoline, unsafe.Slice((*byte)(unsafe.Pointer(targetFunc)), len(trampoline)))
 
-	codeCave, _ := windows.VirtualAlloc(0, uintptr(len(trampoline)+13), 0x1000|0x2000, syscall.PAGE_EXECUTE_READWRITE)
+	codeCave := hook.allocNearAddress(targetFunc)
 	if codeCave == 0 {
 		return 0, errors.New("bad code cave")
 	}
