@@ -136,13 +136,11 @@ func (hook *TrampolineHook) createTrampoline(targetFunc uintptr) (uintptr, error
 		return 0, errors.New("bad code cave")
 	}
 
-	// Add a jump back to the rest of the original function
-	originalAddr := targetFunc + 5
+	originalAddr := (targetFunc + 5) - (codeCave + 10)
 	jmpBack := []byte{
-		0x49, 0xBA, // MOV RAX, immediate
+		0xE9, // JMP [RIP + offset]
 	}
-	jmpBack = append(jmpBack, toBytes(uint64(originalAddr), 8)...)
-	jmpBack = append(jmpBack, 0x41, 0xFF, 0xE2) // JMP RAX
+	jmpBack = append(jmpBack, toBytes(uint64(originalAddr), 4)...)
 
 	trampoline = append(trampoline, jmpBack...)
 
@@ -163,10 +161,10 @@ func (hook *TrampolineHook) applyShortJump(targetFunc, newFunc uintptr) error {
 // applyLongJump applies a long jump from targetFunc to newFunc.
 func (hook *TrampolineHook) applyLongJump(targetFunc, newFunc uintptr) error {
 	jmpBytes := []byte{
-		0x49, 0xBA, // MOV RAX, immediate
+		0xFF, 0x25, // JMP [RIP + offset]
 	}
-	jmpBytes = append(jmpBytes, toBytes(uint64(newFunc), 8)...)
-	jmpBytes = append(jmpBytes, 0x41, 0xFF, 0xE2) // JMP RAX
+	jmpBytes = append(jmpBytes, toBytes(uint64(0x00000000), 4)...) // 4-byte offset (relative to RIP)
+	jmpBytes = append(jmpBytes, toBytes(uint64(newFunc), 8)...)    // Store the 64-bit address at the offset location
 
 	relayFunction := hook.allocNearAddress(targetFunc)
 	if relayFunction == 0 {

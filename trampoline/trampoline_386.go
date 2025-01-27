@@ -27,7 +27,7 @@ func (hook *TrampolineHook) createTrampoline(targetFunc uintptr) (uintptr, error
 	// Add a jump back to the rest of the original function
 	originalAddr := (targetFunc + 5) - (codeCave + 5)
 	jmpBack := []byte{
-		0xE9, // MOV RAX, immediate
+		0xE9,
 	}
 	jmpBack = append(jmpBack, toBytes(uint64(originalAddr), 4)...)
 
